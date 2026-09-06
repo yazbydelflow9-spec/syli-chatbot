@@ -4,7 +4,7 @@ import httpx
 from .knowledge import build_system_prompt
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-MODEL = os.getenv("OPENROUTER_MODEL", "anthropic/claude-haiku-4-5-20251001")
+MODEL = os.getenv("OPENROUTER_MODEL", "anthropic/claude-sonnet-4-6")
 
 
 def _detect_language(text: str) -> str:

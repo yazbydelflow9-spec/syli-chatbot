@@ -91,17 +91,81 @@ def get_client_messages(client_id: str) -> list[dict]:
 
 def get_stats() -> dict:
     db = get_db()
-    clients = db.table("clients").select("stage, created_at, last_contact").eq("is_archived", False).execute().data or []
+    clients = db.table("clients").select("stage, created_at, last_contact, guide_sent").eq("is_archived", False).execute().data or []
     today = datetime.now(timezone.utc).date().isoformat()
+    week_start = (datetime.now(timezone.utc).date() - __import__('datetime').timedelta(days=7)).isoformat()
     stages = {}
     active_today = 0
+    active_week = 0
+    guide_sent = 0
     for c in clients:
         s = c.get("stage", "lead")
         stages[s] = stages.get(s, 0) + 1
-        if c.get("last_contact", "")[:10] == today:
+        lc = c.get("last_contact", "")[:10]
+        if lc == today:
             active_today += 1
+        if lc >= week_start:
+            active_week += 1
+        if c.get("guide_sent"):
+            guide_sent += 1
+    # Revenue forecast: clients in qualified+ stages × 15M GNF
+    revenue_stages = {"qualified", "docs_submitted", "payment_pending", "visa_pending", "visa_approved", "arrived"}
+    pipeline_clients = sum(stages.get(s, 0) for s in revenue_stages)
     return {
         "total": len(clients),
         "active_today": active_today,
+        "active_week": active_week,
+        "guide_sent": guide_sent,
         "by_stage": stages,
+        "revenue_forecast_gnf": pipeline_clients * 15_000_000,
+        "pipeline_clients": pipeline_clients,
     }
+
+
+def get_weekly_new_leads(weeks: int = 8) -> list[dict]:
+    """Returns new leads per week for the last N weeks."""
+    db = get_db()
+    import datetime as dt
+    result = []
+    now = datetime.now(timezone.utc)
+    for i in range(weeks - 1, -1, -1):
+        week_start = (now - dt.timedelta(weeks=i + 1)).date()
+        week_end = (now - dt.timedelta(weeks=i)).date()
+        res = db.table("clients").select("id", count="exact").gte("created_at", week_start.isoformat()).lt("created_at", week_end.isoformat()).execute()
+        label = f"S-{i}" if i > 0 else "Cette sem."
+        result.append({"week": label, "count": res.count or 0, "start": week_start.isoformat()})
+    return result
+
+
+def get_response_time_stats(days: int = 7) -> list[dict]:
+    """Average bot response time per day (seconds)."""
+    db = get_db()
+    import datetime as dt
+    result = []
+    now = datetime.now(timezone.utc)
+    for i in range(days - 1, -1, -1):
+        day = (now - dt.timedelta(days=i)).date()
+        day_str = day.isoformat()
+        msgs = db.table("messages").select("role, created_at").gte("created_at", day_str).lt("created_at", (day + dt.timedelta(days=1)).isoformat()).order("created_at").execute().data or []
+        times = []
+        for j in range(1, len(msgs)):
+            if msgs[j]["role"] == "assistant" and msgs[j-1]["role"] == "user":
+                try:
+                    t1 = datetime.fromisoformat(msgs[j-1]["created_at"].replace("Z", "+00:00"))
+                    t2 = datetime.fromisoformat(msgs[j]["created_at"].replace("Z", "+00:00"))
+                    diff = (t2 - t1).total_seconds()
+                    if 0 < diff < 60:
+                        times.append(diff)
+                except Exception:
+                    pass
+        avg = round(sum(times) / len(times), 1) if times else 0
+        label = day.strftime("%d/%m") if i > 0 else "Auj."
+        result.append({"day": label, "avg_seconds": avg, "count": len(times)})
+    return result
+
+
+def get_clients_by_stage(stage: str) -> list[dict]:
+    """Get all active clients in a specific stage."""
+    db = get_db()
+    res = db.table("clients").select("*").eq("stage", stage).eq("is_archived", False).eq("is_bot_paused", False).execute()
+    return res.data or []
