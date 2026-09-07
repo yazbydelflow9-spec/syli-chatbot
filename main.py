@@ -173,7 +173,7 @@ class ClientUpdate(BaseModel):
 @app.patch("/api/clients/{client_id}")
 async def api_update_client(client_id: str, body: ClientUpdate, background_tasks: BackgroundTasks):
     db = get_db()
-    fields = {k: v for k, v in body.model_dump(exclude={"notify"}).items() if v is not None}
+    fields = {k: v for k, v in body.model_dump(exclude={"notify"}).items() if v is not None or k in ("is_bot_paused", "is_archived")}
     if not fields:
         raise HTTPException(400, "No fields to update")
     res = db.table("clients").update(fields).eq("id", client_id).execute()
@@ -193,10 +193,10 @@ class DirectMessage(BaseModel):
 @app.post("/api/clients/{client_id}/send")
 async def api_send_direct(client_id: str, body: DirectMessage, background_tasks: BackgroundTasks):
     db = get_db()
-    res = db.table("clients").select("*").eq("id", client_id).single().execute()
+    res = db.table("clients").select("*").eq("id", client_id).limit(1).execute()
     if not res.data:
         raise HTTPException(404, "Client not found")
-    client = res.data
+    client = res.data[0]
     background_tasks.add_task(send_message, client["phone"], body.message)
     save_message(client_id, "assistant", body.message)
     return {"sent": True}

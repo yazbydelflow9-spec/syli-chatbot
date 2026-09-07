@@ -17,10 +17,10 @@ def get_db() -> Client:
 
 def get_or_create_client(phone: str) -> dict:
     db = get_db()
-    res = db.table("clients").select("*").eq("phone", phone).single().execute()
+    res = db.table("clients").select("*").eq("phone", phone).limit(1).execute()
     if res.data:
         db.table("clients").update({"last_contact": datetime.now(timezone.utc).isoformat()}).eq("phone", phone).execute()
-        return res.data
+        return res.data[0]
     new = db.table("clients").insert({"phone": phone, "stage": "lead"}).execute()
     return new.data[0]
 
@@ -54,14 +54,14 @@ def save_message(client_id: str, role: str, content: str):
 
 def is_bot_active() -> bool:
     db = get_db()
-    res = db.table("bot_config").select("is_active").eq("id", 1).single().execute()
-    return res.data.get("is_active", True) if res.data else True
+    res = db.table("bot_config").select("is_active").eq("id", 1).limit(1).execute()
+    return res.data[0].get("is_active", True) if res.data else True
 
 
 def is_client_paused(phone: str) -> bool:
     db = get_db()
-    res = db.table("clients").select("is_bot_paused").eq("phone", phone).single().execute()
-    return res.data.get("is_bot_paused", False) if res.data else False
+    res = db.table("clients").select("is_bot_paused").eq("phone", phone).limit(1).execute()
+    return res.data[0].get("is_bot_paused", False) if res.data else False
 
 
 def get_all_clients() -> list[dict]:
