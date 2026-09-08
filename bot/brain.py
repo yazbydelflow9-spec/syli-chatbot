@@ -10,12 +10,33 @@ MODEL = os.getenv("OPENROUTER_MODEL", "anthropic/claude-sonnet-4-6")
 
 _UPDATE_RE = re.compile(r'<UPDATE>(.*?)</UPDATE>', re.DOTALL)
 
-_FRENCH_WORDS = {"je", "tu", "il", "nous", "vous", "bonjour", "merci", "comment", "est", "pour", "que", "qui", "avec", "pas", "une", "des", "mon", "ma", "je", "suis", "oui", "non", "mais"}
+_FRENCH_WORDS = {
+    "je", "tu", "il", "elle", "nous", "vous", "ils", "elles",
+    "bonjour", "salut", "bonsoir", "merci", "oui", "non", "mais",
+    "comment", "est", "sont", "pour", "que", "qui", "avec", "pas",
+    "une", "des", "les", "mon", "ma", "mes", "ton", "ta", "ses",
+    "suis", "bien", "très", "aussi", "plus", "même", "tout", "tous",
+    "ça", "c'est", "j'ai", "j'ai", "n'est", "n'hésite", "allez",
+    "avoir", "être", "faire", "veux", "voudrais", "pouvez", "puis",
+    "donc", "voici", "alors", "quand", "comme", "après", "avant",
+    "bon", "bonne", "ok", "d'accord", "parfait", "franchement",
+}
+_ENGLISH_WORDS = {
+    "the", "is", "are", "was", "were", "have", "has", "will", "would",
+    "can", "could", "should", "do", "does", "did", "and", "but", "or",
+    "my", "your", "he", "she", "we", "they", "it", "this", "that",
+    "hi", "hello", "yes", "no", "please", "thank", "thanks", "okay",
+    "what", "when", "where", "how", "why", "who", "which",
+}
 
 
 def _detect_language(text: str) -> str:
-    words = set(text.lower().split())
-    return "fr" if len(words & _FRENCH_WORDS) >= 2 else "en"
+    words = set(text.lower().replace("'", " ").replace("'", " ").split())
+    fr_score = len(words & _FRENCH_WORDS)
+    en_score = len(words & _ENGLISH_WORDS)
+    if fr_score == 0 and en_score == 0:
+        return "fr"  # default to French for Guinea audience
+    return "fr" if fr_score >= en_score else "en"
 
 
 def _parse_update_block(raw: str) -> tuple[str, dict]:
