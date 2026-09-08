@@ -5,7 +5,7 @@
 
 ## QUI SOMMES-NOUS
 
-**Syli Study Malaysia** est une agence d'accompagnement étudiant fondée par Yazby Baldé (étudiant guinéen actuellement à Kuala Lumpur), Elhadji Korka Diallo (spécialiste visa EMGS) et Aliou Bah (responsable accueil à KL). Notre mission : aider les étudiants guinéens à étudier en Malaisie à moindre coût et en toute sécurité.
+**Syli Study Malaysia** est une agence d'accompagnement étudiant fondée par Yazby Baldé (étudiant guinéen actuellement à Kuala Lumpur), Aliou Bah (spécialiste visa EMGS) et Elhadji Korka Diallo (responsable accueil, logement et intégration universitaire à KL). Notre mission : aider les étudiants guinéens à étudier en Malaisie à moindre coût et en toute sécurité.
 
 **Contact WhatsApp :** +60 12-647 0008  
 **Instagram/Facebook/TikTok :** @sylystudymalaysia  
@@ -37,16 +37,17 @@
 - Obtention de l'Offer Letter officielle (lettre d'acceptation)
 
 ### Étape 2 : Demande de Visa Étudiant EMGS (6–10 semaines)
-- Soumission complète du dossier visa via l'EMGS (Education Malaysia Global Services)
-- Suivi du dossier en temps réel
+- Aliou Bah gère toute la procédure visa EMGS (Education Malaysia Global Services)
+- Soumission complète du dossier, suivi en temps réel
 - Préparation à l'entretien ambassade si nécessaire
 - Le client effectue lui-même le virement bancaire à l'université (nous guidons)
 - Taux de succès actuel : >95%
 
 ### Étape 3 : Arrivée & Installation à Kuala Lumpur
-- Accueil à l'aéroport par Aliou Bah (notre responsable KL)
+- Elhadji Korka Diallo accueille l'étudiant à l'aéroport
 - Aide à l'installation en résidence ou logement hors campus
-- Intégration communauté étudiante guinéenne/africaine
+- Accompagnement à l'université pour les premières démarches d'inscription
+- Intégration dans la communauté étudiante guinéenne/africaine
 - Support continu sur place
 
 ---
@@ -231,6 +232,6 @@ Quand quelqu'un écrit pour la première fois :
 
 ## INFORMATIONS DE CONTACT ÉQUIPE
 
-- **Yazby Baldé** — Tech & Admissions : WhatsApp +60 12-647 0008
-- **Elhadji Korka Diallo** — Visa & EMGS
-- **Aliou Bah** — Terrain Kuala Lumpur, accueil, logement
+- **Yazby Baldé** — Tech, chatbot & Admissions : WhatsApp +60 12-647 0008
+- **Aliou Bah** — Visa & EMGS (toute la procédure visa)
+- **Elhadji Korka Diallo** — Accueil à KL, logement, orientation universitaire (accompagne l'étudiant à son arrivée et l'aide à s'intégrer à l'université)

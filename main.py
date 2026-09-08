@@ -8,7 +8,7 @@ load_dotenv()
 
 from fastapi import FastAPI, HTTPException, Request, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from pydantic import BaseModel
 
 from bot.memory import (
@@ -100,17 +100,16 @@ async def handle_message(phone: str, user_message: str):
         await send_message(phone, response_text)
 
         client_fresh = get_or_create_client(phone)
-        guide_url = os.getenv("GUIDE_PDF_URL", "")
+        guide_url = os.getenv("GUIDE_PDF_URL", "https://syli-chatbot-production.up.railway.app/guide.pdf")
         if (
             guide_url
             and not client_fresh.get("guide_sent")
-            and client_fresh.get("stage") in ("interested", "qualified")
-            and len(history) >= 3
+            and client_fresh.get("stage") in ("lead", "interested", "qualified")
         ):
             sent = await send_document(
                 phone, guide_url,
                 "Syli Study Malaysia — Guide Complet.pdf",
-                "Voici notre guide complet pour étudier en Malaisie",
+                "Voici notre guide complet — lis ça, toutes les infos sont dedans 📄",
             )
             if sent:
                 update_client(phone, {"guide_sent": True})
@@ -259,6 +258,12 @@ async def api_configure_webhook(body: WebhookConfig):
 # ---------------------------------------------------------------------------
 # Dashboard frontend
 # ---------------------------------------------------------------------------
+
+@app.get("/guide.pdf")
+async def serve_guide():
+    path = os.path.join(os.path.dirname(__file__), "guide.pdf")
+    return FileResponse(path, media_type="application/pdf", filename="Syli Study Malaysia — Guide Complet.pdf")
+
 
 @app.get("/", response_class=HTMLResponse)
 async def dashboard():
