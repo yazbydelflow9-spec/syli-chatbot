@@ -37,9 +37,11 @@ async def send_message(phone: str, text: str) -> bool:
             resp = await http.post(
                 f"{base}/message/sendText/{instance}",
                 headers={"apikey": _get_evo_key(), "Content-Type": "application/json"},
-                json={"number": to, "textMessage": {"text": text}},
+                json={"number": to, "text": text},
             )
-            resp.raise_for_status()
+            if resp.status_code >= 400:
+                print(f"[CloudStation] send_message {resp.status_code}: {resp.text}")
+                return False
             return True
         except httpx.HTTPStatusError as e:
             print(f"[CloudStation] send_message error {e.response.status_code}: {e.response.text}")

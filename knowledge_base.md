@@ -140,7 +140,7 @@ R : Minimum BAC ou équivalent. Bac avec mention est un avantage. Nous aidons au
 R : Non obligatoirement. Nous recommandons fortement le programme d'anglais intensif à UniKL (3 mois, 8 120 MYR hébergement inclus). Cela vous prépare à suivre les cours universitaires en anglais. Presque tous nos étudiants passent par ce programme.
 
 **Q : Puis-je travailler pendant mes études en Malaisie ?**
-R : Oui, les étudiants étrangers peuvent travailler jusqu'à 20h/semaine pendant les semestres et à temps plein pendant les vacances, avec autorisation de l'université.
+R : Non. Le visa étudiant en Malaisie ne permet pas de travailler. Tu dois venir avec un budget suffisant pour couvrir tes études et ta vie sur place. Si tu cherches un pays où travailler en parallèle de tes études, la Malaisie n'est pas le bon choix pour ça. Sois clair avec ta famille sur les besoins financiers dès le départ.
 
 **Q : Qu'est-ce que l'EMGS ?**
 R : Education Malaysia Global Services — c'est l'organisme officiel du gouvernement malaisien qui traite toutes les demandes de visa étudiant. Toute demande passe par eux. Nous gérons tout le processus EMGS pour vous.
